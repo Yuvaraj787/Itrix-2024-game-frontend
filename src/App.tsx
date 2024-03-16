@@ -1,34 +1,68 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import BeforeStart from './pages/AuctionPage/beforeStart';
+import {
+  createBrowserRouter,
+  RouterProvider,
+} from "react-router-dom";
+import AfterStart from './pages/AuctionPage/afterStart';
+import Index from './pages/LandingPage';
+import Login from './pages/LandingPage/login';
+import SignUp from './pages/LandingPage/signup';
+import Profile from './pages/Profile/profile';
+import HomePage from './pages/HomePage/index';
+import GameResult from './pages/LeaderBoard/gameResult';
+import UsersLeaderBoard from './pages/LeaderBoard/usersLeaderBoard';
+import TeamLeaderBoard from './pages/LeaderBoard/teamLeaderBoard';
+
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Index />
+  },
+  {
+    path:"/join_room",
+    element: <HomePage />
+  },
+  {
+    path: "/join_room/:room_id",
+    element: <BeforeStart />
+  },
+  {
+    path: "/join_room/:room_id/start",
+    element: <AfterStart />
+  },
+  {
+    path: "/login",
+    element: <Login />
+  },
+  {
+    path: "/signup",
+    element: <SignUp />
+  },
+  {
+    path:"/profile/:userid",
+    element: <Profile />
+  },
+  {
+    path: "/gameResult",
+    element : <GameResult />
+  },
+  {
+    path:"/usersLeaderBoard",
+    element: <UsersLeaderBoard />
+  },
+  {
+    path: "/teamLeadersBoard",
+    element: <TeamLeaderBoard />
+  }
+]);
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    <div>
+      <RouterProvider router={router} />   
+    </div>
   )
 }
 
