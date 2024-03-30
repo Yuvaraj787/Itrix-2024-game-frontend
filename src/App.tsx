@@ -13,6 +13,7 @@ import HomePage from './pages/HomePage/index';
 import GameResult from './pages/LeaderBoard/gameResult';
 import UsersLeaderBoard from './pages/LeaderBoard/usersLeaderBoard';
 import TeamLeaderBoard from './pages/LeaderBoard/teamLeaderBoard';
+import { Toaster } from "@/components/ui/toaster"
 
 const router = createBrowserRouter([
   {
@@ -62,6 +63,7 @@ function App() {
   return (
     <div>
       <RouterProvider router={router} />   
+      <Toaster />
     </div>
   )
 }
