@@ -1,18 +1,22 @@
 import React from 'react';
+import { Cookies } from 'react-cookie';
 import { useNavigate } from 'react-router-dom';
 
+const cookie = new Cookies();
 
 function HomePage() {
   const navigate = useNavigate();
 
   const join_room = () => {
     var room_id = document.getElementById("roomid").value;
+    cookie.set("count", 0);
     navigate("./" + room_id);
   };
 
   const create_room = () => {
     var room_id = (Math.random() + 1).toString(36).substring(7).toUpperCase();
     navigator.clipboard.writeText(room_id)
+    cookie.set("count", 0);
     navigate("./" + room_id + "?host=1");
   };
 

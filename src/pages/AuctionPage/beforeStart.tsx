@@ -3,12 +3,13 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import { io } from 'socket.io-client';
 import { Cookies } from 'react-cookie';
 import AfterStart from './afterStart';
+import ApiUrl from "../../OwnComponents/variables"
 
 const cookie = new Cookies();
 const name = cookie.get("name");
 
 const room_id = window.location.pathname.split('/')[2];
-const socket = io("http://localhost:3000", {
+const socket = io(ApiUrl, {
   query: { name, room_id },
   transports: ['websocket'],
   upgrade: false
@@ -24,6 +25,11 @@ function BeforeStart() {
   const [isHost, setHost] = useState(queryParams.get("host"));
 
   useEffect(() => {
+    if (cookie.get("count") == 0) {
+      window.location.reload();
+      cookie.set("count", 1) 
+    }
+    socket.connect()
     socket.on("users_added", (s_users) => {
       console.log(s_users);
       setUsers(s_users.members);
