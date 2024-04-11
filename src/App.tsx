@@ -6,7 +6,8 @@ import {
 } from "react-router-dom";
 import AfterStart from './pages/AuctionPage/afterStart';
 import Index from './pages/LandingPage';
-import Login from './pages/LandingPage/login';
+import Guest from './pages/LandingPage/guest';
+import Login from "./pages/LandingPage/login"
 import SignUp from './pages/LandingPage/signup';
 import Profile from './pages/Profile/profile';
 import HomePage from './pages/HomePage/index';
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
   {
     path: "/join_room/:room_id/start",
     element: <AfterStart />
+  },
+  {
+    path: "/guestLogin",
+    element: <Guest />
   },
   {
     path: "/login",

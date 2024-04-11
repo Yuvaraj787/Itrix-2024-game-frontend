@@ -26,6 +26,6 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"],
+  "include": ["src", "../itrix-2024-game-backend/action.tsx"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Cookies } from 'react-cookie';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 
 const cookie = new Cookies();
 
 function HomePage() {
   const navigate = useNavigate();
-
+  const [searchParams, setSearchParams] = useSearchParams();
   const join_room = () => {
     var room_id = document.getElementById("roomid").value;
     cookie.set("count", 0);
@@ -19,6 +19,13 @@ function HomePage() {
     cookie.set("count", 0);
     navigate("./" + room_id + "?host=1");
   };
+
+  useEffect(() => {
+    let setToken = searchParams.get("setToken")
+    if (setToken) {
+      cookie.set("token", setToken);
+    }
+  })
 
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
