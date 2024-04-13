@@ -12,11 +12,10 @@ const clockSymbols = [
 "🕑","🕝", "🕗","🕑","🕝", "🕗","🕑","🕝", "🕗","🕑","🕝", "🕗"
 ]
 export function TimeComponent({ value }) {
-  
     return (
       <div style={{width:"100%", textAlign:"center"}}>
         <p className="text-lg mb-2">{clockSymbols[value]} {value}</p>
-      <div style={{border:"2px solid " + colors[value], width: (value-1) * 10 + "%", transition:"width .8s"}}></div>
+      <div style={{border:"2px solid " + colors[value], width: ((value * 1.42)-1) * 10 + "%", transition:"width .8s"}}></div>
       </div>
     );
 }

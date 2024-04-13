@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     element: <AfterStart />
   },
   {
-    path: "/guestLogin",
+    path: "/guest",
     element: <Guest />
   },
   {
