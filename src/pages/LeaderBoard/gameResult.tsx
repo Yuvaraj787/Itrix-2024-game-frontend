@@ -43,7 +43,7 @@ const UserBox = ({ userData, name }) => {
         <div>
         <p className="font-medium text-xl mt-4">Players:</p>
         <ul className="pl-4">
-          {userData.players_picked.map((player, index) => (
+          {userData.players.map((player, index) => (
             <li key={index} className="font-medium">{player}</li>
           ))}
         </ul>

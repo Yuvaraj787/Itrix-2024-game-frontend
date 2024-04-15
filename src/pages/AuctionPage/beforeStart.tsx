@@ -6,18 +6,18 @@ import { Button } from "@/components/ui/button"
 import AfterStart from './afterStart';
 import ApiUrl from "../../OwnComponents/variables"
 import { Share2, UserRound, Play } from 'lucide-react';
-
+import { useToast } from "@/components/ui/use-toast"
 const cookie = new Cookies();
 const name = cookie.get("name");
 
-const room_id = window.location.pathname.split('/')[2];
-const socket = io(ApiUrl, {
-  query: { name, room_id },
+const SocketContext = createContext(null);
+
+
+var socket = io(ApiUrl, {
+  query: { name, room_id:window.location.pathname.split('/')[2] },
   transports: ['websocket'],
   upgrade: false
 });
-
-const SocketContext = createContext(null);
 
 function BeforeStart() {
   const navigate = useNavigate();
@@ -25,9 +25,18 @@ function BeforeStart() {
   const [queryParams] = useSearchParams();
   const [start, setStart] = useState(false);
   const [alreadyStarted, setAlreadyStarted] = useState(false);
+  const { toast } = useToast()
   const [isHost, setHost] = useState(queryParams.get("host"));
+  var [room_id, setRoomId] = useState("FFFFF");
+  // var socket;
+  
+
 
   useEffect(() => {
+    
+    setRoomId(window.location.pathname.split('/')[2]);
+
+   
     if (cookie.get("count") == 0) {
       window.location.reload();
       cookie.set("count", 1) 
@@ -51,6 +60,10 @@ function BeforeStart() {
   }, []);
 
   const startAuction = () => {
+    if (users.length < 2) {
+      toast({title:"Need atleast two members to start the auction", description:"Invite your friends to join the room", variant:"destructive"})
+      return;
+    }
     socket.emit('start-auction', "start");
     setStart(true);
   };
@@ -110,5 +123,5 @@ function BeforeStart() {
   );
 }
 
-export { socket, SocketContext };
+export { SocketContext };
 export default BeforeStart;
