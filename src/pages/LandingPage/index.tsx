@@ -53,9 +53,6 @@ function Index() {
         </div>
       </div>
     </div>
-    <div className='images'>
-      <img
-    </div>
   </div>
   
 </div>
