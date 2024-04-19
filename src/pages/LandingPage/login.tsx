@@ -56,6 +56,7 @@ export default function Login() {
 
       if (resp.success) {
         localStorage.setItem("jwtToken", resp.data.jwtToken)
+        localStorage.setItem("username", resp.data.userName)
         toast.success(resp.message)
         data?.changeAuth(true)
       }

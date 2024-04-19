@@ -43,7 +43,7 @@ function Index() {
         <br />
 
         <div className="buttons">
-          <button onClick={() => navigate("/login")}>  Let's Play</button>
+          <button onClick={() => navigate("/join_room")}>  Let's Play</button>
         </div>
 
         <br />

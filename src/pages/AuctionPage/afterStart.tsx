@@ -150,7 +150,7 @@ function LoadingScreen({ counter }) {
 }
 
 
-function AfterStart({ start }) {
+function AfterStart() {
   const params = useParams();
   const socket = useContext(SocketContext);
   const [unsold, setUnsold] = useState(false);

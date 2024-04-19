@@ -7,14 +7,16 @@ import AfterStart from './afterStart';
 import ApiUrl from "../../OwnComponents/variables"
 import { Share2, UserRound, Play } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast"
-const cookie = new Cookies();
-const name = cookie.get("name");
+const cookie = new Cookies()
+
+const name = localStorage.getItem("username");
+const token = localStorage.getItem("jwtToken");
 
 const SocketContext = createContext(null);
 
 
 var socket = io(ApiUrl, {
-  query: { name, room_id:window.location.pathname.split('/')[2] },
+  query: { token, room_id:window.location.pathname.split('/')[2] },
   transports: ['websocket'],
   upgrade: false
 });
