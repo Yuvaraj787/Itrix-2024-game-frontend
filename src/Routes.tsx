@@ -6,14 +6,14 @@ const SignUp = lazy(() => import("./pages/LandingPage/signup"));
 const _404 = lazy(() => import("./pages/404"));
 const HomePage = lazy(() => import("./pages/HomePage/index"))
 
-const AfterStart = lazy(() => import( './pages/AuctionPage/afterStart'));
-const BeforeStart = lazy(() => import( './pages/AuctionPage/beforeStart'));
-const Index = lazy(() => import( './pages/LandingPage'));
+const AfterStart = lazy(() => import('./pages/AuctionPage/afterStart'));
+const BeforeStart = lazy(() => import('./pages/AuctionPage/beforeStart'));
+const Index = lazy(() => import('./pages/LandingPage'));
 // const Guest = lazy(() => import( './pages/LandingPage/guest'));
-const Profile = lazy(() => import( './pages/Profile/profile'));
-const GameResult = lazy(() => import( './pages/LeaderBoard/gameResult'));
-const UsersLeaderBoard = lazy(() => import( './pages/LeaderBoard/usersLeaderBoard'));
-const TeamLeaderBoard = lazy(() => import( './pages/LeaderBoard/teamLeaderBoard'));
+const Profile = lazy(() => import('./pages/Profile/profile'));
+const GameResult = lazy(() => import('./pages/LeaderBoard/gameResult'));
+const UsersLeaderBoard = lazy(() => import('./pages/LeaderBoard/usersLeaderBoard'));
+const TeamLeaderBoard = lazy(() => import('./pages/LeaderBoard/teamLeaderBoard'));
 
 
 const authRoute = [
@@ -52,52 +52,55 @@ const authRoute = [
 ]
 
 const unAuthRoute = [
-    {
-        "path": "/login",
-        "element": <Login />
-    },
-    {
-        "path": "/signup",
-        "element": <SignUp />
-    }
+  {
+    "path": "/login",
+    "element": <Login />
+  },
+  {
+    "path": "/signup",
+    "element": <SignUp />
+  }, {
+    "path": "/usersLeaderBoard",
+    "element": <UsersLeaderBoard />
+  }
 ]
 
 function CustomRouter({ isAuth }): { isAuth: any } {
 
-    if (isAuth) {
-        return (
-            <Routes__ default_="/" data={authRoute}>
-            </Routes__>
-        )
-    }
-
+  if (isAuth) {
     return (
-        <Routes__ default_="/login" data={unAuthRoute}>
-        </Routes__>
-    );
+      <Routes__ default_="/" data={authRoute}>
+      </Routes__>
+    )
+  }
+
+  return (
+    <Routes__ default_="/login" data={unAuthRoute}>
+    </Routes__>
+  );
 }
 
 // for allowing only id present in data
 
 
 function Routes__({ data, default_ }: { data: any, default_: string }) {
-    console.log(data)
-    return (
-        <BrowserRouter>
-            <Suspense >
-                <Routes>
-                    {
-                        data.map((item: any) => {
-                            return (
-                                <Route path={item.path} element={item.element}></Route>
-                            )
-                        })
-                    }
-                    <Route path="*" element={<Navigate to={default_}></Navigate>} ></Route>
-                </Routes>
-            </Suspense>
-        </BrowserRouter>
-    );
+  console.log(data)
+  return (
+    <BrowserRouter>
+      <Suspense >
+        <Routes>
+          {
+            data.map((item: any) => {
+              return (
+                <Route path={item.path} element={item.element}></Route>
+              )
+            })
+          }
+          <Route path="*" element={<Navigate to={default_}></Navigate>} ></Route>
+        </Routes>
+      </Suspense>
+    </BrowserRouter>
+  );
 }
 
 export default CustomRouter;
