@@ -74,8 +74,26 @@ export const resendOtpHandler = async (data: any) => {
 };
 
 //reset password
-export const requestResetPasswordHandler = async (data: any) => {};
+export const requestResetPasswordHandler = async (data: any) => {
+  try {
+    const resp = await axios.post(port + "/auth/resetPasswordOtp/", data);
+    return resp.data;
+  } catch (err) {
+    if (err.response) return err.response.data;
+
+    return false;
+  }
+};
 
 // confirmation after forgot password
 
-export const resetPasswordHandler = async (data: any) => {};
+export const resetPasswordHandler = async (data: any) => {
+  try {
+    const resp = await axios.post(port + "/auth/verifyResetPassword/", data);
+    return resp.data;
+  } catch (err) {
+    if (err.response) return err.response.data;
+
+    return false;
+  }
+};

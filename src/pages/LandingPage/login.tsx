@@ -15,7 +15,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify"
 import { Triangle } from "react-loader-spinner"
-import { loginHandler } from "@/services/Auth.service";
+import { loginHandler, requestResetPasswordHandler, resetPasswordHandler } from "@/services/Auth.service";
 import {
   GoogleReCaptchaProvider,
   GoogleReCaptcha
@@ -29,6 +29,8 @@ export default function Login() {
   const [requesting, setRequesting] = useState(false);
   const [token, setToken] = useState(null)
   const [refreshReCaptcha, setRefreshReCaptcha] = useState(false);
+  const [forgotPasswordPanel, setPasswordPanel] = useState(false)
+  const [OTP, setOTP] = useState("")
 
   const data = useContext(CustomContext)
 
@@ -36,6 +38,52 @@ export default function Login() {
 
     setToken(token)
   }, [])
+
+  useEffect(() => {
+    setPassword("")
+
+    if(forgotPasswordPanel){
+        (async function(){
+            
+        })()
+    }
+
+  }, [forgotPasswordPanel])
+
+  const resetPassword = async () => {
+
+    if (email.trim().length == 0 || password.trim().length == 0 || OTP.trim().length) {
+      toast.error('Some fields are empty')
+      return
+    }
+
+    setRequesting(true)
+
+    const resp = await resetPasswordHandler({
+      email,
+      password,
+      otp: OTP,
+      "recaptcha_token": token
+    })
+
+    if (resp) {
+
+      if (resp.success) {
+        localStorage.setItem("jwtToken", resp.data.jwtToken)
+        toast.success(resp.message)
+        data?.changeAuth(true)
+      }
+      else {
+        toast.error(resp.message)
+      }
+    }
+    else {
+      toast.error("Something went wrong")
+    }
+
+    setRequesting(false)
+    setRefreshReCaptcha(r => !r)
+  }
 
   const login = async () => {
 
@@ -107,7 +155,22 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password" className="text-white">Password</Label>
+              <Label htmlFor="otp" className="text-white">OTP</Label>
+              <Input
+                id="otp"
+                value={email}
+                onChange={(e) => setOTP(e.target.value)}
+                placeholder="OTP"
+                required
+
+                type="number"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-white">
+                {forgotPasswordPanel ? "New Password" : "Password"}
+              </Label>
               <Input
                 id="password"
                 value={password}
@@ -148,7 +211,7 @@ export default function Login() {
             </div>
 
             <div className="text-white">
-              Forgot Password? <Button style={{ color: "white" }} variant={"link"}>Click Here</Button>
+              {forgotPasswordPanel ? "Login?" : "Forgot Password?"} <Button onClick={() => setPasswordPanel(r => !r)} style={{ color: "white" }} variant={"link"}>Click Here</Button>
             </div>
 
 
