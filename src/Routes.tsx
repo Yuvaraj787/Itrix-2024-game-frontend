@@ -6,12 +6,49 @@ const SignUp = lazy(() => import("./pages/LandingPage/signup"));
 const _404 = lazy(() => import("./pages/404"));
 const HomePage = lazy(() => import("./pages/HomePage/index"))
 
+const AfterStart = lazy(() => import( './pages/AuctionPage/afterStart'));
+const BeforeStart = lazy(() => import( './pages/AuctionPage/beforeStart'));
+const Index = lazy(() => import( './pages/LandingPage'));
+// const Guest = lazy(() => import( './pages/LandingPage/guest'));
+const Profile = lazy(() => import( './pages/Profile/profile'));
+const GameResult = lazy(() => import( './pages/LeaderBoard/gameResult'));
+const UsersLeaderBoard = lazy(() => import( './pages/LeaderBoard/usersLeaderBoard'));
+const TeamLeaderBoard = lazy(() => import( './pages/LeaderBoard/teamLeaderBoard'));
+
 
 const authRoute = [
-    {
-        "path": "/",
-        "element": <HomePage />
-    }
+  {
+    path: "/profile/:userid",
+    element: <Profile />
+  },
+  {
+    path: "/gameResult",
+    element: <GameResult />
+  },
+  {
+    path: "/usersLeaderBoard",
+    element: <UsersLeaderBoard />
+  },
+  {
+    path: "/teamLeadersBoard",
+    element: <TeamLeaderBoard />
+  },
+  {
+    path: "/",
+    element: <Index />
+  },
+  {
+    path: "/join_room",
+    element: <HomePage />
+  },
+  {
+    path: "/join_room/:room_id",
+    element: <BeforeStart />
+  },
+  {
+    path: "/join_room/:room_id/start",
+    element: <AfterStart />
+  }
 ]
 
 const unAuthRoute = [

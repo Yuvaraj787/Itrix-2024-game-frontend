@@ -15,7 +15,7 @@ function HomePage() {
 
   const create_room = () => {
     var room_id = (Math.random() + 1).toString(36).substring(7).toUpperCase();
-    navigator.clipboard.writeText(room_id)
+    if (navigator.clipboard) navigator.clipboard.writeText(room_id)
     cookie.set("count", 0);
     navigate("./" + room_id + "?host=1");
   };

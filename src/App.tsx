@@ -96,6 +96,7 @@ import CustomRouter from './Routes';
 import 'react-toastify/dist/ReactToastify.css';
 import { jwtTokenHandler } from "./services/Auth.service"
 import { ColorRing } from "react-loader-spinner"
+import {Circles, animateThem} from "./OwnComponents/animateScript"
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
@@ -142,7 +143,7 @@ function App() {
       }
 
     })()
-
+    animateThem();
   }, [])
 
   useEffect(() => {
@@ -184,6 +185,7 @@ function App() {
 
         <ToastContainer />
       </CustomContext.Provider>
+      <Circles />
     </div>
   );
 }

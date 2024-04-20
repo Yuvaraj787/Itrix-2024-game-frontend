@@ -1,6 +1,11 @@
 
-export default function Scoreboard(props) {
-  const list=props.player;
+export default function Scoreboard() {
+  const list=[
+    {rank : 1, name: "Yuvaraj", wins: 3, matchplayed: 5},
+    {rank : 2, name: "Muthu", wins: 2, matchplayed: 3},
+    {rank : 3, name: "kumaran", wins: 1, matchplayed: 2},
+    {rank : 4, name: "nancy", wins: 0, matchplayed: 2}
+  ];
   const listItems = list.map((p, index) => (
     <tr key={index} className='bg-neutral-800 cursor-pointer duration-300 border-2 border-neutral-950 shadow-inner hover:shadow-teal-500 hover:border-teal-400 relative'>
       <td className='py-3 px-6'>{p.rank}</td>
@@ -15,7 +20,7 @@ export default function Scoreboard(props) {
   return (
     <div className='m-0 h-screen bg-neutral-900 '>
       
-        <h3 className='text-teal-500 py-7 text-center text-4xl'>SCOREBOARD</h3>
+        <h3 className='text-teal-500 py-7 text-center text-4xl'>Overall Leaderboard</h3>
 
       <div className='h-screen bg-neutral-900 flex justify-center items-start'>
     
