@@ -18,7 +18,6 @@ const SocketContext = createContext(null);
 var socket = io(ApiUrl, {
   query: { token, room_id:window.location.pathname.split('/')[2] },
   transports: ['websocket'],
-  upgrade: false
 });
 
 function BeforeStart() {

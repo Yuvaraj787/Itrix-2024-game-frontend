@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useToast } from "@/components/ui/use-toast"
+import { toast } from "react-toastify"
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { Hand } from 'lucide-react';
 import { Wifi, WifiOff } from 'lucide-react';
@@ -24,7 +24,9 @@ import { Wifi, WifiOff } from 'lucide-react';
 import "./custom.css"
 
 const cookie = new Cookies();
-const user = cookie.get("name");
+
+const user = localStorage.getItem("username");
+const token = localStorage.getItem("jwtToken");
 
 
 const url = "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS2S2faj8R_GwZQc5X4XbrHemH7FHzaKgVE5cpv3U26xQ&s"
@@ -81,8 +83,8 @@ function PlayerCard({ currentPlayer, stamp }) {
           <div className='gap-x-4 w-full rounded-lg backdrop-blur-lg bg-cover bg-image' style={{ display: "flex", flexDirection: "row", backgroundImage: "url(" + currentPlayer.flagUrl + ")" }}>
             <div className='in-image' style={{ width: "60%" }}>
 
-            <img className='rounded-2xl bg-contain ' style={{ width: "90%", padding: "3%" }} src={currentPlayer.image_path} />
-          </div>
+              <img className='rounded-2xl bg-contain ' style={{ width: "90%", padding: "3%" }} src={currentPlayer.image_path} />
+            </div>
 
             {/* <div id="container">
 
@@ -155,7 +157,6 @@ function AfterStart() {
   const socket = useContext(SocketContext);
   const [unsold, setUnsold] = useState(false);
   const navigate = useNavigate()
-  const { toast } = useToast()
   const [bid, setBid] = useState({ status: false, details: {} });
   const [stamp, setStamp] = useState(false);
   const [gameData, setGameData] = useState([]);
@@ -189,11 +190,7 @@ function AfterStart() {
     });
 
     socket.on("inc-bid-amount", (bidDetails) => {
-
-      toast({
-        title: "Bid Placed",
-        description: `Bid placed by ${bidDetails.username} for Rs. ${bidDetails.player.currentPrice}`,
-      })
+      toast.info(`Bid placed by ${bidDetails.username} for Rs. ${bidDetails.player.currentPrice}`);
       setCurrentPlayer(bidDetails.player);
     });
 
@@ -207,23 +204,20 @@ function AfterStart() {
       setGameData(game_data);
       setPurseData(purse_detail);
 
-      toast({
-        title: "Player Sold",
-        description: `Player ${lastbid.player.fullname} sold to user ${lastbid.username} for Rs. ${lastbid.player.currentPrice}`,
-      })
+      toast.info(
+       `Player ${lastbid.player.fullname} sold to user ${lastbid.username} for Rs. ${lastbid.player.currentPrice}`
+      )
 
     });
 
     socket.on("unsold", (lastbid: any) => {
-      toast({
-        title: "Player Unsold",
-        description: `Player ${lastbid.player.fullname} unsold !`,
-      })
-
+      toast(
+        `Player ${lastbid.player.fullname} unsold !`
+      )
     });
 
     socket.on("scores", (scoreData) => {
-      localStorage.setItem("scores", JSON.stringify(scoreData))
+      localStorage.setItem("scores", scoreData)
       navigate("/gameResult")
     })
 
@@ -243,6 +237,7 @@ function AfterStart() {
       copy.currentPrice += 5;
     }
     const sendData = {
+      token: token,
       username: user,
       player: copy
     };
