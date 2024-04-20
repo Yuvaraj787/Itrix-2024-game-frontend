@@ -5,68 +5,7 @@ import Confetti from 'react-confetti'
 import Modal from 'react-modal';
 
 
-let scoreData = [
-  {
-    username: 'Raju',
-    batting_score: 8,
-    bowling_score: 5,
-    overall_score: 7,
-    rank: 1,
-    players: [
-      'David Willey',
-      'Dhananjaya de Silva',
-      'Suresh Raina',
-      "D'Arcy Short",
-      'Reeza Hendricks'
-    ],
-    justification: 'Excellent balance of batting and bowling. Has a top-class captain and wicket-keeper.'
-  },
-  {
-    username: 'yuvarajv',
-    batting_score: 7,
-    bowling_score: 6,
-    overall_score: 6,
-    rank: 2,
-    players: [
-      'Marnus Labuschagne',
-      'Ambati Rayudu',
-      'Aaron Finch',
-      'Adam Zampa',
-      'Nathan Coulter-Nile'
-    ],
-    justification: 'Marnus Labuschagne and Aaron Finch are good batsmen. Adam Zampa and Nathan Coulter-Nile are good bowlers.'
-  },
-  {
-    username: 'kumaran',
-    batting_score: 8,
-    bowling_score: 5,
-    overall_score: 7,
-    rank: 3,
-    players: [
-      'David Willey',
-      'Dhananjaya de Silva',
-      'Suresh Raina',
-      "D'Arcy Short",
-      'Reeza Hendricks'
-    ],
-    justification: 'Excellent balance of batting and bowling. Has a top-class captain and wicket-keeper.'
-  },
-  {
-    username: 'Virat',
-    batting_score: 8,
-    bowling_score: 5,
-    overall_score: 7,
-    rank: 4,
-    players: [
-      'David Willey',
-      'Dhananjaya de Silva',
-      'Suresh Raina',
-      "D'Arcy Short",
-      'Reeza Hendricks'
-    ],
-    justification: 'Excellent balance of batting and bowling. Has a top-class captain and wicket-keeper.'
-  },
-];
+let scoreData = JSON.parse(localStorage.getItem("scores"))
 
 
 const Box = ({ data }: { data: any }) => {
