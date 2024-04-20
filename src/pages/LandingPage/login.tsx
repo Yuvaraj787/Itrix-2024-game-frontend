@@ -42,10 +42,10 @@ export default function Login() {
   useEffect(() => {
     setPassword("")
 
-    if(forgotPasswordPanel){
-        (async function(){
-            
-        })()
+    if (forgotPasswordPanel) {
+      (async function () {
+
+      })()
     }
 
   }, [forgotPasswordPanel])
@@ -155,7 +155,7 @@ export default function Login() {
               />
             </div>
 
-            <div className="space-y-2">
+            {forgotPasswordPanel && <div className="space-y-2">
               <Label htmlFor="otp" className="text-white">OTP</Label>
               <Input
                 id="otp"
@@ -166,7 +166,7 @@ export default function Login() {
 
                 type="number"
               />
-            </div>
+            </div>}
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-white">

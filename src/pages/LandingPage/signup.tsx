@@ -88,7 +88,8 @@ export default function SignUp() {
     if (resp) {
 
       if (resp.success) {
-        toast.success(resp.message)
+        toast.success(resp.message + " , Please Login")
+        window.location.href = "/login"
       }
       else {
         toast.error(resp.message)
@@ -122,7 +123,8 @@ export default function SignUp() {
     if (resp) {
 
       if (resp.success) {
-        toast.success(resp.message)
+        setVerificationPanel(true)
+        toast.success(resp.message + " and verify your account")
       }
       else {
         toast.error(resp.message)
