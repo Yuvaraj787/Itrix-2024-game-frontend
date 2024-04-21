@@ -170,9 +170,9 @@ function App() {
 
         }
         <ToastContainer
-          position="top-right"
+          position="top-center"
           autoClose={2000}
-          hideProgressBar={false}
+          hideProgressBar={true}
           newestOnTop={false}
           closeOnClick
           rtl={false}
@@ -180,7 +180,6 @@ function App() {
           draggable
           pauseOnHover
           theme="light"
-
         />
 
         <ToastContainer />

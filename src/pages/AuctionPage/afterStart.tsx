@@ -23,6 +23,10 @@ import { Wifi, WifiOff } from 'lucide-react';
 
 import "./custom.css"
 
+import LoadImage from "./Question-mark-face.jpg"
+import Stamp from "./pngegg.png"
+
+
 const cookie = new Cookies();
 
 const user = localStorage.getItem("username");
@@ -64,10 +68,6 @@ function IndividualCard({ soldPlayers, username, purseLeft, slotsLeft, isUserDis
     </div>
   );
 }
-
-
-import LoadImage from "./Question-mark-face.jpg"
-import Stamp from "./pngegg.png"
 
 
 function PlayerCard({ currentPlayer, stamp }) {
@@ -160,10 +160,7 @@ function AfterStart() {
   const [bid, setBid] = useState({ status: false, details: {} });
   const [stamp, setStamp] = useState(false);
   const [gameData, setGameData] = useState([]);
-  const [purseData, setPurseData] = useState({
-    Yuvaraj: { amountLeft: 80, slotsLeft: 2 },
-    Muthu: { amountLeft: 70, slotsLeft: 3 }
-  });
+  const [purseData, setPurseData] = useState({});
   const [currentPlayer, setCurrentPlayer] = useState({});
   const [counter, setCounter] = useState(10);
   const [loading, setLoading] = useState(false);
@@ -174,7 +171,6 @@ function AfterStart() {
 
   useEffect(() => {
     socket.on("counter", (msg) => {
-      setLoading(false)
       setCounter(msg);
     });
 
@@ -184,6 +180,7 @@ function AfterStart() {
     })
 
     socket.on("start-bidding", ([player, purse]) => {
+      setLoading(false)
       console.log("got the player")
       setPurseData(purse);
       setCurrentPlayer(player);

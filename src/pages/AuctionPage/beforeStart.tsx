@@ -5,7 +5,7 @@ import { Cookies } from 'react-cookie';
 import { Button } from "@/components/ui/button"
 import AfterStart from './afterStart';
 import ApiUrl from "../../OwnComponents/variables"
-import { Share2, UserRound, Play } from 'lucide-react';
+import { Share2, UserRound, Play, LogOut } from 'lucide-react';
 import { useToast } from "@/components/ui/use-toast"
 const cookie = new Cookies()
 
@@ -27,7 +27,7 @@ function BeforeStart() {
   const [start, setStart] = useState(false);
   const [alreadyStarted, setAlreadyStarted] = useState(false);
   const { toast } = useToast()
-  const [isHost, setHost] = useState(queryParams.get("host"));
+  const [isHost, setHost] = useState("");
   var [room_id, setRoomId] = useState("FFFFF");
   // var socket;
   
@@ -58,6 +58,12 @@ function BeforeStart() {
       callback();
     });
 
+    socket.emit("who-is-host", setHost)
+
+    socket.on("accept-host", (h_name) => {
+      setHost(h_name)
+    })
+
   }, []);
 
   const startAuction = () => {
@@ -83,6 +89,10 @@ function BeforeStart() {
     }
   }
 
+  const leaveRoom = () => {
+    socket.disconnect();
+  }
+
   return (
     <SocketContext.Provider value={socket}>
       <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900 text-white">
@@ -105,16 +115,19 @@ function BeforeStart() {
               <h1 className="text-3xl font-bold mb-4">List of Players</h1>
               <div className="mb-4">
                 {users.map((user, index) => (
-                  <p key={index} className="text-lg flex flex-row align-center gap-3 m-3"><UserRound /> {user} <span>{user == name  && " ( You ) "}</span></p>
+                  <p key={index} className="text-lg flex flex-row align-center gap-3 m-3"><UserRound /> {user} <span>{user == name  && " ( You ) "}</span>  <span>{user == isHost  && " ( Host ) "}</span></p>
                 ))}
               </div>
-              <div className='w-full flex justify-center'>
+              <div className='w-full flex justify-center flex-row gap-2'>
 
-              {isHost == 1 ? (
+              {(isHost == name) ? (
                 <Button onClick={startAuction} className="bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 m-auto text-lg text-bold"><Play className="mr-2 h-6 w-6" />Start Auction</Button>
               ) : (
-                <h2 className="text-lg">Auction will be started only by host</h2>
+                <h2 className="text-lg m-auto">Auction will be started only by host</h2>
               )}
+               <Button onClick={leaveRoom} className="bg-red-600 text-white hover:bg-red-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 m-auto text-lg text-bold">
+                <LogOut className="mr-2 h-6 w-6" />
+                Leave Room</Button>
               </div>
             </div>
           )}
