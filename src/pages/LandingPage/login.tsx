@@ -16,10 +16,10 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-toastify"
 import { Triangle } from "react-loader-spinner"
 import { loginHandler, requestResetPasswordHandler, resetPasswordHandler } from "@/services/Auth.service";
-import {
-  GoogleReCaptchaProvider,
-  GoogleReCaptcha
-} from 'react-google-recaptcha-v3';
+// import {
+//   GoogleReCaptchaProvider,
+//   GoogleReCaptcha
+// } from 'react-google-recaptcha-v3';
 import { useContext } from "react";
 import { CustomContext } from "@/App";
 
@@ -66,6 +66,7 @@ export default function Login() {
       "recaptcha_token": token
     })
 
+
     if (resp) {
 
       if (resp.success) {
@@ -93,13 +94,12 @@ export default function Login() {
     }
 
     setRequesting(true)
-
+    try {
     const resp = await loginHandler({
       email,
       password,
       "recaptcha_token": token
     })
-
     if (resp) {
 
       if (resp.success) {
@@ -118,7 +118,9 @@ export default function Login() {
 
     setRequesting(false)
     setRefreshReCaptcha(r => !r)
-
+  } catch (err) {
+    alert(err.message)
+  }
   }
 
   useEffect(() => {
@@ -130,12 +132,12 @@ export default function Login() {
   return (
     <div className="min-h-screen flex justify-center items-center items-center bg-black">
 
-      <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
+      {/* <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha}>
 
         </GoogleReCaptcha>
 
-      </GoogleReCaptchaProvider>
+      </GoogleReCaptchaProvider> */}
 
       <Card className="mx-auto max-w-sm m-5 backdrop-blur bg-white/25">
         <CardHeader className="space-y-1 flex items-center justify-center">

@@ -6,8 +6,8 @@ import { Button } from "@/components/ui/button"
 import AfterStart from './afterStart';
 import ApiUrl from "../../OwnComponents/variables"
 import { Share2, UserRound, Play, LogOut } from 'lucide-react';
-import { useToast } from "@/components/ui/use-toast"
 const cookie = new Cookies()
+import { toast } from "react-toastify"
 
 const name = localStorage.getItem("username");
 const token = localStorage.getItem("jwtToken");
@@ -26,7 +26,6 @@ function BeforeStart() {
   const [queryParams] = useSearchParams();
   const [start, setStart] = useState(false);
   const [alreadyStarted, setAlreadyStarted] = useState(false);
-  const { toast } = useToast()
   const [isHost, setHost] = useState("");
   var [room_id, setRoomId] = useState("FFFFF");
   // var socket;
@@ -68,7 +67,7 @@ function BeforeStart() {
 
   const startAuction = () => {
     if (users.length < 2) {
-      toast({title:"Need atleast two members to start the auction", description:"Invite your friends to join the room", variant:"destructive"})
+      toast.info("Need atleast two members to start the auction");
       return;
     }
     socket.emit('start-auction', "start");
@@ -91,6 +90,7 @@ function BeforeStart() {
 
   const leaveRoom = () => {
     socket.disconnect();
+    navigate("../")
   }
 
   return (

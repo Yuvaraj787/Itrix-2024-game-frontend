@@ -5,7 +5,7 @@ const Login = lazy(() => import("./pages/LandingPage/login"));
 const SignUp = lazy(() => import("./pages/LandingPage/signup"));
 const _404 = lazy(() => import("./pages/404"));
 const HomePage = lazy(() => import("./pages/HomePage/index"))
-
+const Instruction = lazy(() => import("./pages/LandingPage/instructions"))
 const AfterStart = lazy(() => import('./pages/AuctionPage/afterStart'));
 const BeforeStart = lazy(() => import('./pages/AuctionPage/beforeStart'));
 const Index = lazy(() => import('./pages/LandingPage'));
@@ -28,6 +28,10 @@ const authRoute = [
   {
     path: "/usersLeaderBoard",
     element: <UsersLeaderBoard />
+  },
+  {
+    "path": "/guide",
+    "element": <Instruction />
   },
   {
     path: "/teamLeadersBoard",
@@ -57,11 +61,18 @@ const unAuthRoute = [
     "element": <Login />
   },
   {
+    "path": "/guide",
+    "element": <Instruction />
+  },
+  {
     "path": "/signup",
     "element": <SignUp />
-  }, {
+  },{
     "path": "/usersLeaderBoard",
     "element": <UsersLeaderBoard />
+  },{
+    path: "/",
+    element: <Index />
   }
 ]
 
@@ -86,6 +97,11 @@ function CustomRouter({ isAuth }): { isAuth: any } {
 function Routes__({ data, default_ }: { data: any, default_: string }) {
   console.log(data)
   return (
+    <div style={{
+      fontFamily: '"Jersey 25", sans-serif',
+      fontWeight: 400,
+      color:"black",
+      fontStyle: "normal"}}>
     <BrowserRouter>
       <Suspense >
         <Routes>
@@ -100,6 +116,7 @@ function Routes__({ data, default_ }: { data: any, default_: string }) {
         </Routes>
       </Suspense>
     </BrowserRouter>
+    </div>
   );
 }
 

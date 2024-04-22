@@ -18,11 +18,9 @@ import { Label } from "@/components/ui/label"
 import { toast } from "react-toastify"
 import { CountdownCircleTimer } from 'react-countdown-circle-timer'
 import { Hand } from 'lucide-react';
-import { Wifi, WifiOff } from 'lucide-react';
-
-
+import { Wifi, WifiOff, ChevronLast } from 'lucide-react';
+import { ReactionBarSelector } from '@charkour/react-reactions';
 import "./custom.css"
-
 import LoadImage from "./Question-mark-face.jpg"
 import Stamp from "./pngegg.png"
 
@@ -164,6 +162,8 @@ function AfterStart() {
   const [currentPlayer, setCurrentPlayer] = useState({});
   const [counter, setCounter] = useState(10);
   const [loading, setLoading] = useState(false);
+  const [skippable, setSkippable] = useState(true);
+  const [skipCount, setSkipCount] = useState(0);
 
   useEffect(() => {
     document.title = "IPL | Auction Room";
@@ -180,6 +180,8 @@ function AfterStart() {
     })
 
     socket.on("start-bidding", ([player, purse]) => {
+      setSkippable(true)
+      setSkipCount(0);
       setLoading(false)
       console.log("got the player")
       setPurseData(purse);
@@ -187,6 +189,7 @@ function AfterStart() {
     });
 
     socket.on("inc-bid-amount", (bidDetails) => {
+      setSkippable(false)
       toast.info(`Bid placed by ${bidDetails.username} for Rs. ${bidDetails.player.currentPrice}`);
       setCurrentPlayer(bidDetails.player);
     });
@@ -202,7 +205,7 @@ function AfterStart() {
       setPurseData(purse_detail);
 
       toast.info(
-       `Player ${lastbid.player.fullname} sold to user ${lastbid.username} for Rs. ${lastbid.player.currentPrice}`
+        `Player ${lastbid.player.fullname} sold to user ${lastbid.username} for Rs. ${lastbid.player.currentPrice}`
       )
 
     });
@@ -218,7 +221,18 @@ function AfterStart() {
       navigate("/gameResult")
     })
 
+    socket.on("skip", (uArray) => {
+      setSkipCount(uArray.length)
+    })
+
   }, [socket]);
+
+  function skipPlayer() {
+    if (!skippable) return;
+    let str = "skip" + currentPlayer.id;
+    socket.emit(str, user)
+    setSkippable(false)
+  }
 
 
   const bidPlayer = () => {
@@ -291,10 +305,16 @@ function AfterStart() {
         {currentPlayer.fullname && <h2 className="text-xl">Currently Bidding Player</h2>}
         {loading ? <LoadingScreen counter={counter} /> : <PlayerCard currentPlayer={currentPlayer} stamp={stamp} />}
         {(!loading && currentPlayer.fullname) && <TimeComponent value={counter} />}
-        {(!loading && currentPlayer.fullname) && <Button onClick={bidPlayer} className="w-full text-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 mt-4">
+        {(!loading && currentPlayer.fullname) && <><Button onClick={bidPlayer} className="w-full text-lg bg-blue-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 mt-4">
           <Hand className="mr-2 h-6 w-6" />
           Bid for Player
-        </Button>}
+        </Button>
+          <Button onClick={skipPlayer} className="w-full text-lg bg-red-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 mt-4">
+          <ChevronLast className="mr-2 h-6 w-6" />
+            Request to skip ( {skipCount} / {Object.keys(purseData).length} )
+          </Button></>
+        }
+        {/* <ReactionBarSelector /> */}
         {Object.keys(purseData).map(u_name => {
           return <IndividualCard username={u_name} isUserDisconnected={purseData[u_name].disconnected} soldPlayers={gameData} slotsLeft={purseData[u_name].slotsLeft} purseLeft={purseData[u_name].amountLeft} />
         })}

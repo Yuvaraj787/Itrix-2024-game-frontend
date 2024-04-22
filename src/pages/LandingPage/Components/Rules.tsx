@@ -4,15 +4,20 @@ import { faArrowLeft, faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import './rules.css';
 function Rules() {
   let arr: string[] = [
+    "Auction mania is a site to play mock ipl auction with your friends",
     "One user (host) creates a room and shares the room ID with friends.",
     "Only the host can start the game after all friends join the room.",
-    "Players periodically bid for available players.",
+    "After the game starts, Players will randomly selected and go under the hammer",
+    "Users need to bid for players to form their team.",
     "The highest bidder gets the player, with a 7-second time limit for bids.",
     "If no bid is placed within the time limit, the player goes unsold.",
     "Each user must pick 5 players with an initial purse of 70 lakhs.",
-    "The game ends after all users have picked 5 players.",
+    "The game ends after all active users have picked 5 players.",
     "Results and winners are decided by Google's Gemini Pro AI model.",
-    "Scores are based on the overall balance of the team."
+    "Scores are based on the overall balance of the team.",
+    "Based on these scores, Player gets the rank in the overall leaderboard",
+    "One user can play as many games as they wish",
+    "Winner will be decided after 3 to 4 days, based on the overall leaderboard"
   ];
 
   const [cins, setCins] = useState(0);
@@ -65,8 +70,8 @@ function Rules() {
       </div>
       <div
         id="content"
-        className="flex font-bold flex-col text-white p-12 font-sans text-xl"
-        style={{ fontFamily: "Aldrich, sans-serif" }}
+        className="flex  flex-col text-white p-12 text-xl"
+        style={{letterSpacing: 1}}
       >
         <div className="mb-9 mt-5">{arr[cins]}</div>
         <div className="mb-9">{arr[cins + 1]}</div>

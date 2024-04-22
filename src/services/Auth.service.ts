@@ -1,7 +1,5 @@
 import axios from "axios";
-
-const port = "http://127.0.0.1:3000";
-
+import port  from '@/OwnComponents/variables';
 //jwt-token
 export const jwtTokenHandler = async () => {
   try {
@@ -31,6 +29,7 @@ export const loginHandler = async (data: any) => {
     const resp = await axios.post(port + "/auth/login/", data);
     return resp.data;
   } catch (err) {
+    alert(err.message)
     if (err.response) return err.response.data;
 
     return false;
