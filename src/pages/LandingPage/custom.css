@@ -174,7 +174,7 @@ nav .menu {
     border: none;
 }
 
-/* responsive query starting*/
+/* responsive query starting */
 @media (min-width: 1200px){
 	.menu ul {
 		display: flex;
@@ -184,6 +184,7 @@ nav .menu {
 		overflow: hidden;
 	}
 }
+
 
 body {
 	overflow: hidden !important;

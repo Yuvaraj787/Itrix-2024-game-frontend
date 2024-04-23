@@ -7,6 +7,7 @@ function App() {
       <div className='bg-cover w-full  h-screen' style={{
         backgroundImage:`url(${bgimg})`
       }}>
+        
           <Header/>
           <Rules/>
       </div>

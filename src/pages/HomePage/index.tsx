@@ -4,6 +4,8 @@ import { Cookies } from 'react-cookie';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import api_url from '@/OwnComponents/variables';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 const cookie = new Cookies();
 
@@ -74,6 +76,8 @@ function HomePage() {
   return (
     <div className="flex flex-col items-center justify-center h-screen bg-gray-900 text-white">
       <div className="bg-gray-800 shadow-md rounded-lg p-8 max-w-md w-full">
+        <button onClick={() => navigate("/")} className="my-4 p-2 py-2 rounded-lg shadow-md bg-black text-white"> <FontAwesomeIcon icon={faArrowLeft} /> Go back</button>
+
         <h1 className="text-2xl font-semibold mb-4">Join or Create a Room</h1>
 
         <div className="mb-4">
@@ -99,7 +103,7 @@ function HomePage() {
           <div className="space-y-2">
             {activeRooms.map((room) => (
               <div key={room.roomid} className="flex items-center py-2">
-                <span className="mr-2 font-medium"><span className='cursor-pointer underline text-green-300 hover:text-white' onClick={() => navigate("./"+room.roomid)}>{room.roomid}</span></span>
+                <span className="mr-2 font-medium"><span className='cursor-pointer underline text-green-300 hover:text-white' onClick={() => navigate("./" + room.roomid)}>{room.roomid}</span></span>
                 <span className="text-gray-500 mr-2">created by</span>
                 <span>{room.host}</span>
               </div>
