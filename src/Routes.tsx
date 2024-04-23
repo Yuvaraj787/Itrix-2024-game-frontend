@@ -97,25 +97,26 @@ function CustomRouter({ isAuth }): { isAuth: any } {
 function Routes__({ data, default_ }: { data: any, default_: string }) {
   console.log(data)
   return (
-    <div style={{
-      fontFamily: '"Jersey 25", sans-serif',
-      fontWeight: 400,
-      color:"black",
-      fontStyle: "normal"}}>
-    <BrowserRouter>
-      <Suspense >
-        <Routes>
-          {
-            data.map((item: any) => {
-              return (
-                <Route path={item.path} element={item.element}></Route>
-              )
-            })
-          }
-          <Route path="*" element={<Navigate to={default_}></Navigate>} ></Route>
-        </Routes>
-      </Suspense>
-    </BrowserRouter>
+    <div
+      style={{
+        fontWeight: 400,
+        color: "black",
+        fontStyle: "normal",
+      }}
+    >
+      <BrowserRouter>
+        <Suspense>
+          <Routes>
+            {data.map((item: any) => {
+              return <Route path={item.path} element={item.element}></Route>;
+            })}
+            <Route
+              path="*"
+              element={<Navigate to={default_}></Navigate>}
+            ></Route>
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
     </div>
   );
 }
