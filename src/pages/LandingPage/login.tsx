@@ -22,6 +22,7 @@ import { loginHandler, requestResetPasswordHandler, resetPasswordHandler } from 
 // } from 'react-google-recaptcha-v3';
 import { useContext } from "react";
 import { CustomContext } from "@/App";
+import { GoogleReCaptcha, GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -35,20 +36,20 @@ export default function Login() {
   const data = useContext(CustomContext)
 
   const onVerify = useCallback((token: any) => {
-
+    console.log("Token reftched")
     setToken(token)
   }, [])
 
-  useEffect(() => {
-    setPassword("")
+  // useEffect(() => {
+  //   setPassword("")
 
-    if (forgotPasswordPanel) {
-      (async function () {
+  //   if (forgotPasswordPanel) {
+  //     (async function () {
 
-      })()
-    }
+  //     })()
+  //   }
 
-  }, [forgotPasswordPanel])
+  // }, [forgotPasswordPanel])
 
   const resetPassword = async () => {
 
@@ -95,32 +96,33 @@ export default function Login() {
 
     setRequesting(true)
     try {
-    const resp = await loginHandler({
-      email,
-      password,
-      "recaptcha_token": token
-    })
-    if (resp) {
+      const resp = await loginHandler({
+        email,
+        password,
+        "recaptcha_token": token
+      })
+      if (resp) {
 
-      if (resp.success) {
-        localStorage.setItem("jwtToken", resp.data.jwtToken)
-        localStorage.setItem("username", resp.data.userName)
-        toast.success(resp.message)
-        data?.changeAuth(true)
+        if (resp.success) {
+          localStorage.setItem("jwtToken", resp.data.jwtToken)
+          localStorage.setItem("username", resp.data.userName)
+          data?.changeAuth(true)
+        }
+        else {
+          toast.error(resp.message)
+          console.log("Error")
+        }
       }
       else {
-        toast.error(resp.message)
+        toast.error("Something went wrong")
       }
-    }
-    else {
-      toast.error("Something went wrong")
-    }
 
-    setRequesting(false)
-    setRefreshReCaptcha(r => !r)
-  } catch (err) {
-    alert(err.message)
-  }
+      setRequesting(false)
+      setRefreshReCaptcha(r => !r)
+    } catch (err) {
+      toast.error("Something went wrong")
+      setRefreshReCaptcha(r => !r)
+    }
   }
 
   useEffect(() => {
@@ -132,12 +134,12 @@ export default function Login() {
   return (
     <div className="min-h-screen flex justify-center items-center items-center bg-black">
 
-      {/* <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
+      <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
         <GoogleReCaptcha onVerify={onVerify} refreshReCaptcha={refreshReCaptcha}>
 
         </GoogleReCaptcha>
 
-      </GoogleReCaptchaProvider> */}
+      </GoogleReCaptchaProvider>
 
       <Card className="mx-auto max-w-sm m-5 backdrop-blur bg-white/25">
         <CardHeader className="space-y-1 flex items-center justify-center">
@@ -211,10 +213,6 @@ export default function Login() {
               Don't have account? <Button color="tertiary" variant={"link"} style={{ color: "white" }} >
                 <div onClick={() => window.location.href = "/signup"}>Signup</div>
               </Button>
-            </div>
-
-            <div className="text-white">
-              {forgotPasswordPanel ? "Login?" : "Forgot Password?"} <Button onClick={() => setPasswordPanel(r => !r)} style={{ color: "white" }} variant={"link"}>Click Here</Button>
             </div>
 
 

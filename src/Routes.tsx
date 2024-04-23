@@ -39,7 +39,7 @@ const authRoute = [
   },
   {
     path: "/",
-    element: <Index />
+    element: <Index isAuth={true} />
   },
   {
     path: "/join_room",
@@ -72,7 +72,7 @@ const unAuthRoute = [
     "element": <UsersLeaderBoard />
   },{
     path: "/",
-    element: <Index />
+    element: <Index isAuth={false}/>
   }
 ]
 

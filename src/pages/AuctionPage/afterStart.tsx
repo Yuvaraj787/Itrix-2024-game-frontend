@@ -239,7 +239,7 @@ function AfterStart() {
     const str = "bid" + currentPlayer.id;
     let copy = { ...currentPlayer };
     if (purseData[user] < (copy.currentPrice + 5)) {
-      alert("You don't that much amount left in your purse to bid")
+      toast.error("You don't that much amount left in your purse to bid")
       return;
     }
     if (copy.currentPrice === undefined || copy.currentPrice === 0) {
@@ -310,7 +310,7 @@ function AfterStart() {
           Bid for Player
         </Button>
           <Button onClick={skipPlayer} className="w-full text-lg bg-red-600 text-white hover:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300 rounded-md px-4 py-2 mt-4">
-          <ChevronLast className="mr-2 h-6 w-6" />
+            <ChevronLast className="mr-2 h-6 w-6" />
             Request to skip ( {skipCount} / {Object.keys(purseData).length} )
           </Button></>
         }

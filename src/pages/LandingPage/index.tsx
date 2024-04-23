@@ -4,10 +4,10 @@ import { useNavigate } from 'react-router-dom';
 import RoomJpg from "./assets/room.jpg"
 
 
-function Index() {
+function Index({ isAuth }: { isAuth: any }) {
   const navigate = useNavigate()
   return (
-    <div className='div-body h-100' style={{ height: "100vh", overflow:"hidden" }} >
+    <div className='div-body h-100' style={{ height: "100vh", overflow: "hidden" }} >
       <div className="ripple-background" >
         <div className="circle1 xxlarge shade1"></div>
         <div className="circle1 xlarge shade2"></div>
@@ -31,14 +31,28 @@ function Index() {
               <li><a href="http://itrix.istaceg.in/">About ITRIX</a></li>
             </ul>
             <div className="NavBtns">
-              <button style={{color:"black"}} onClick={() => navigate("/login")}>Log in</button>
+
+              {
+                isAuth ? <button style={{ color: "black" }} onClick={() => {
+
+                  localStorage.removeItem("jwtToken")
+
+                  window.location.reload()
+
+                }}>Log out</button> : <button style={{ color: "black" }} onClick={() => {
+
+                  navigate("/login")
+
+                }}>Log in</button>
+              }
+
             </div>
           </div>
         </nav>
 
         <div className="container">
           <div className="InnerDiv">
-            <div className="center" style={{zIndex: 9}}>
+            <div className="center" style={{ zIndex: 9 }}>
               <p className="title">IPL Auction Mania</p>
               <br />
               <p className="sub">Time for IPL auction antics! Who'll snag the stars and who's stuck with the surprises? Let the bidding begin!</p>
@@ -49,7 +63,7 @@ function Index() {
               </div>
 
               <br />
-             
+
               {/* <ReactionCounter  /> */}
               <div className="buttons">
                 <button onClick={() => navigate("/guide")}>  How to play ? </button>

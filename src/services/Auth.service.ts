@@ -29,7 +29,6 @@ export const loginHandler = async (data: any) => {
     const resp = await axios.post(port + "/auth/login/", data);
     return resp.data;
   } catch (err) {
-    alert(err.message)
     if (err.response) return err.response.data;
 
     return false;

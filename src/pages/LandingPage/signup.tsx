@@ -12,7 +12,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { isValidElement, useCallback, useEffect, useState } from "react";
 // import { sendVerificationLink } from "./action";
-import { Link, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify"
 import { Triangle } from "react-loader-spinner"
 import { accountVerificationHandler, resendOtpHandler, signupHandler } from "@/services/Auth.service";
@@ -52,7 +51,8 @@ export default function SignUp() {
     if (resp) {
 
       if (resp.success) {
-        toast.success(resp.message)
+        toast.success(resp.message + " , Please Login")
+        window.location.href = "/login"
       }
       else {
         toast.error(resp.message)

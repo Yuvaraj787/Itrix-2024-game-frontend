@@ -48,6 +48,7 @@ function Rules() {
       }}
       className="flex justify-center rounded-xl  w-[58rem] h-[29rem] ml-[16.5rem] mt-3 relative w-full h-screen"
     >
+       
       <div
         id="la"
         style={{
