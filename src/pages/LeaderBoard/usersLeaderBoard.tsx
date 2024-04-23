@@ -33,7 +33,7 @@ export default function Scoreboard() {
       <td className='py-3 px-6'>{p.username}</td>
       <td className='py-3 px-6'>{p.scores ? p.scores : 0}</td>
       <td className='py-3 px-6'>{p.matches_played ? p.matches_played : 0}</td>
-      <td className='py-3 px-6'>{((p.matches_won / p.matches_played) * 100).toFixed(2) ? ((p.matches_won / p.matches_played) * 100).toFixed(2) : 0}%</td>
+      <td className='py-3 px-6'>{((Number(p.matches_won) / Number(p.matches_played)) * 100).toFixed(2) ? (( Number(p.matches_won) / Number(p.matches_played)) * 100).toFixed(2) : 0}%</td>
       <td className='absolute inset-0 border-t-0 border-neutral-950 shadow-inner hover:shadow-teal-500 hover:border-teal-400 hover:border-t-2'></td>
     </tr>
   ));
