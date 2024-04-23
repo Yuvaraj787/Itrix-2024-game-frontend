@@ -38,9 +38,9 @@ export default function Scoreboard() {
 
       <h3 className='text-teal-500 py-7 text-center text-4xl'>Overall Leaderboard</h3>
 
-      <div className='h-screen bg-neutral-900 flex justify-center items-start'>
-
-        <table className='border-2 my-5 border-neutral-950 w-9/12 border-collapse'>
+      <div className='bg-neutral-900 flex justify-center items-start'>
+      <div style={{height:"90vh", overflowY:"scroll"}}>
+        <table className='border-2 border-neutral-950 border-collapse'>
           <thead className=' text-teal-500'>
             <tr>
               <th className='py-3 bg-neutral-950'>Rank</th>
@@ -52,6 +52,7 @@ export default function Scoreboard() {
           </thead>
           <tbody className='text-neutral-200 text-center'>{listItems}</tbody>
         </table>
+        </div>
       </div>
     </div>
   )
