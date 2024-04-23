@@ -1,14 +1,24 @@
+  //useEffect(function,[dependencies])
+  //useEffect(function,[value]) => changes only when 'value' changes
+  //useEffect(function,[]) => when it mounts
+
+// Client-side code (React)
 import React, { useState ,useEffect} from 'react';
+import Axios from "axios";
+const userid = "yogasimman";
+const PORT = 7000;
+const SERVER_URL = `http://localhost:${PORT}`
+
 
 function UserProfile() {
   const [showUpdateProfile, setShowUpdateProfile] = useState(false);
   const [showChangePassword, setShowChangePassword] = useState(false);
   const [updatedName, setUpdatedName] = useState("Guest");
-  const [username, setUsername] = useState("sword123");
+  const [username, setUsername] = useState(userid);
   const [email, setEmail] = useState("guest@gmail.com");
   const [profilePicture, setProfilePicture] = useState("");
   const [favoriteTeam, setFavoriteTeam] = useState("");
-  const [gender, setGender] = useState("Male");
+  const [gender, setGender] = useState("Female");
   const [nos, setNos] = useState(0); //Number of matches played
   const [nosw, setNosw] = useState(0); //Number of matches won
   const [pos, setPos] = useState(0); //Position in overall Leaderboard
@@ -20,6 +30,115 @@ function UserProfile() {
   const [nameError, setNameError] = useState(""); 
 
   const [intervalId, setIntervalId] = useState(null);
+
+  const [inputName, setInputName] = useState("");
+  const [inputEmail,setInputEmail] = useState("");
+  const [inputFavoriteTeam,setInputFavoriteTeam] = useState("");
+  const [inputGender,setInputGender] = useState("");
+  useEffect(() => {
+    getData();
+  }, []);
+
+  // Function to fetch data from server
+  const getData = async () => {
+    try {
+      const response = await Axios.post(`${SERVER_URL}/api`, { username }); // Send username to the server
+      const userData = response.data[0]; // Assuming only one user is returned
+      if (userData && userData.name) {
+        setUpdatedName(userData.name);
+         // Set the name received from the server
+      }
+      if (userData && userData.email){
+        setEmail(userData.email);
+        //Set the email received from the server
+      }
+      if (userData && userData.favoriteTeam){
+        setFavoriteTeam(Team_Fullname(userData.favoriteTeam));
+        setFlippedProfile(true);
+      }
+      if (userData && userData.gender){
+        setGender(userData.gender);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  const updateName = async (value) => {
+    try {
+      await Axios.post(`${SERVER_URL}/updateName`, { user: username, name: value });
+      console.log("Name updated successfully");
+       // Refresh data after update
+      setNameError(""); // Clear name error after successful update
+    } catch (error) {
+      console.error(error);
+      console.log("Error updating name");
+      setNameError("Error updating name. Please try again."); // Set name error if update fails
+    }
+  }
+
+  const updateEmail = async()=>{
+    try{
+      await Axios.post(`${SERVER_URL}/updateEmail`,{user: username, email: inputEmail});
+      console.log("Email updated sucessfully");
+      setEmailError("");
+    }catch(error){
+      console.error(error);
+      console.log("Error updating email");
+      setEmailError("Error updating email. Please try again");// Set email error if update fails
+    }
+  }
+
+  const updateGender = async()=>{
+    try{
+      await Axios.post(`${SERVER_URL}/updateGender`,{user: username, gender: inputGender});
+      console.log("Gender updated sucessfully");
+    }catch(error){
+      console.error(error);
+      console.log("Error updating gender");
+      setGenderError("Error updating gender. Please try again");// Set email error if update fails
+    }
+  }
+
+  const updateFavoriteTeam = async (value) => {
+    try {
+      await Axios.post(`${SERVER_URL}/updateFavoriteTeam`, { user: username, favouriteTeam: value });
+      console.log("Favorite Teams updated successfully");
+      setFlippedProfile(true); // Assuming this should be set to true after updating the favorite team
+    } catch (error) {
+      console.error(error);
+      console.log("Error updating FavoriteTeam");
+      // Handle error if needed
+    }
+  }
+
+  function Team_Fullname(team){
+    switch(team){
+      case "csk":
+        return "Chennai Super Kings";
+      case "dc":
+        return "Delhi Captials";
+      case "gt":
+        return "Gujarat Titans";
+      case "mi":
+        return "Mumbai Indians";
+      case "rr":
+        return "Rajastan Royals";
+      case "srh":
+        return "Sunrises Hyderabad";
+      case "lsg":
+        return "Lucknow Super Giants";
+      case "pbks":
+        return "Punjab Kings"
+      case "kkr":
+        return "Kolkata Knight Riders";
+      case "rcb":
+        return "Royal Challengers Bangaluru";
+      default:
+        return "";
+    }
+  }
+
 
   useEffect(() => {
     return () => {
@@ -35,9 +154,12 @@ function UserProfile() {
   };
 
   const handleFavoriteTeamChange = (event) => {
-    const newTeam = event.target.value;
-    setFavoriteTeam(newTeam);
-    setFlippedProfile(true);
+    setInputFavoriteTeam(Team_Fullname(event.target.value));
+    updateFavoriteTeam(inputFavoriteTeam);
+    
+    if(event.target.value !== ""){
+      setFlippedProfile(true); 
+    }
     if (intervalId) {
       clearInterval(intervalId);
     }
@@ -54,9 +176,22 @@ function UserProfile() {
   }
 
 
-  const handleNameChange = (event) => {
+ /* const handleNameChange = (event) => {
     setUpdatedName(event.target.value);
     setNameError(validateName(event.target.value) ? "" : "Name cannot be empty");
+    if(validateName(event.target.value)){
+
+    }
+  };*/
+  const handleNameChange = (event) => {
+    setInputName(event.target.value);
+    if(validateName(event.target.value)){
+      
+      setNameError("");
+      
+    }else{
+      setNameError("Name cannot be empty")
+    }
   };
 
   const handleUsernameChange = (event) => {
@@ -77,7 +212,7 @@ function UserProfile() {
 
   const handleEmailChange = (event) => {
     const newEmail = event.target.value;
-    setEmail(newEmail);
+    setInputEmail(newEmail);
     setEmailError(validateEmail(newEmail) ? "" : "Please enter a valid email address");
   };
 
@@ -94,7 +229,7 @@ function UserProfile() {
   };
 
   const handleGenderChange = (event) => {
-    setGender(event.target.value);
+    setInputGender(event.target.value);
     setGenderError(event.target.value ? "" : "Please select a gender");
   };
 
@@ -109,6 +244,9 @@ function UserProfile() {
   const handleUpdateProfile = () => {
     setShowUpdateProfile(true);
     setShowChangePassword(false);
+    setInputName(updatedName);
+    setInputEmail(email);
+    
   };
 
   const handleChangePassword = () => {
@@ -122,17 +260,31 @@ function UserProfile() {
   };
 
   const handleSave = () => {
-    if (!gender) {
-      setGenderError("Please select a gender");
-      return;
-    }
 
-    if (!validateName(updatedName)) {
+    if (validateName(inputName)) {
+      updateName(inputName);
+    }else{
       setNameError("Name cannot be empty");
       return;
     }
-    setShowUpdateProfile(false);
-    setShowChangePassword(false);
+
+    if(validateEmail(inputEmail)){
+      updateEmail(inputEmail);
+      setShowUpdateProfile(false);
+      setShowChangePassword(false);
+    }else{
+      setEmailError("Type an vaild email")
+      return;
+    }
+    console.log(inputGender);
+    if(inputGender !== ""){
+      updateGender(inputGender);
+      setGenderError("");
+    }else{
+      setGenderError("Please select a gender");
+      return;
+    }
+    getData();
   };
 
   const handleLogout = () => {
@@ -270,7 +422,7 @@ function UserProfile() {
                             <div className="mb-4 relative">
                               <input
                                 type="text"
-                                value={updatedName}
+                                value={inputName}
                                 onChange={handleNameChange}
                                 className={`border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100 ${nameError ? 'border-red-500' : 'hover:shadow-md'}`}
                               />
@@ -290,7 +442,7 @@ function UserProfile() {
                         <dd className="mt-1   font-semibold text-gray-900">
                           {showUpdateProfile ? (
                             <div>
-                              <select value={gender} onChange={handleGenderChange} className="border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100">
+                              <select id="gender" onChange={handleGenderChange} className="border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100">
                                 <option value="">Select</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
@@ -314,7 +466,7 @@ function UserProfile() {
                             <div className="mb-4 relative">
                               <input 
                                 type="email" 
-                                value={email} 
+                                value={inputEmail} 
                                 onChange={handleEmailChange} 
                                 placeholder="Enter new value" 
                                 className={`border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100 ${emailError ? 'border-red-500' : 'hover:shadow-md'}`} 
@@ -366,22 +518,23 @@ function UserProfile() {
                         <dd className="mt-1  font-semibold text-gray-900">
                           {showUpdateProfile ? (
                             <div className="mb-4">
-                              <select value={favoriteTeam} onChange={handleFavoriteTeamChange} className="border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100">
+                              <select  onChange={handleFavoriteTeamChange} className="border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100">
                                 <option value="">Select</option>
-                                <option value="Chennai Super Kings">Chennai Super Kings</option>
-                                <option value="Delhi Capitals">Delhi Capitals</option>
-                                <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
-                                <option value="Mumbai Indians">Mumbai Indians</option>
-                                <option value="Punjab Kings">Punjab Kings</option>
-                                <option value="Rajasthan Royals">Rajasthan Royals</option>
-                                <option value="Royal Challengers Bengaluru">Royal Challengers Bengaluru</option>
-                                <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
-                                <option value="Lucknow Super Giants">Lucknow Super Giants</option>
-                                <option value="Gujarat Titans">Gujarat Titans</option>
+                                <option value="csk">Chennai Super Kings</option>
+                                <option value="dc">Delhi Capitals</option>
+                                <option value="kkr">Kolkata Knight Riders</option>
+                                <option value="mi">Mumbai Indians</option>
+                                <option value="pbks">Punjab Kings</option>
+                                <option value="rr">Rajasthan Royals</option>
+                                <option value="rcb">Royal Challengers Bengaluru</option>
+                                <option value="srh">Sunrisers Hyderabad</option>
+                                <option value="lsg">Lucknow Super Giants</option>
+                                <option value="gt">Gujarat Titans</option>
                               </select>
                             </div>
                           ) : (
                             favoriteTeam
+                            
                           )}
                         </dd>
                       </div>
@@ -470,3 +623,4 @@ function UserProfile() {
 }
 
 export default UserProfile;
+
