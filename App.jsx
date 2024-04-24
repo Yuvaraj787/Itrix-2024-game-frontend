@@ -35,9 +35,38 @@ function UserProfile() {
   const [inputEmail,setInputEmail] = useState("");
   const [inputFavoriteTeam,setInputFavoriteTeam] = useState("");
   const [inputGender,setInputGender] = useState("");
+  const [checkPassword,setCheckPassword] = useState("");
+  const [inputPassword,setInputPassword] = useState("");
+  
   useEffect(() => {
     getData();
+    startInterval(); // Start the flipping animation when the component mounts
   }, []);
+
+  useEffect(() => {
+    startInterval(); // Start the flipping animation when the component mounts
+  }, []);
+
+  const startInterval = () => {
+    const id = setInterval(() => {
+      setFlippedProfile((prevFlipped) => !prevFlipped);
+    }, 4300);
+    return () => clearInterval(id); // Clear the interval on component unmount
+  };
+
+const handleFavoriteTeamChange = (event) => {
+  setInputFavoriteTeam(event.target.value);
+  
+  
+  if(event.target.value !== ""){
+    setFlippedProfile(true); 
+  }
+  if (intervalId) {
+    clearInterval(intervalId);
+  }
+  startInterval();
+};
+
 
   // Function to fetch data from server
   const getData = async () => {
@@ -53,12 +82,42 @@ function UserProfile() {
         //Set the email received from the server
       }
       if (userData && userData.favoriteTeam){
-        setFavoriteTeam(Team_Fullname(userData.favoriteTeam));
+        setFavoriteTeam(userData.favoriteTeam);
         setFlippedProfile(true);
+        
+      
+        const startInterval = () => {
+          const id = setInterval(() => {
+            setFlippedProfile((prevFlipped) => !prevFlipped);
+          }, 7000);
+          setIntervalId(id);
+        };
+      
+        const handleFavoriteTeamChange = (event) => {
+          setInputFavoriteTeam(event.target.value);
+          setFlippedProfile(false);
+          
+          if(event.target.value !== ""){
+            setFlippedProfile(true); 
+          }
+          if (intervalId) {
+            clearInterval(intervalId);
+          }
+          startInterval();
+        };
+      
+
       }
       if (userData && userData.gender){
         setGender(userData.gender);
       }
+      if (userData && userData.matches_played){
+        setNos(userData.matches_played);
+      }
+      if (userData && userData.matches_won){
+        setNosw(userData.matches_won);
+      }
+      
     } catch (error) {
       console.error(error);
     }
@@ -100,17 +159,51 @@ function UserProfile() {
     }
   }
 
-  const updateFavoriteTeam = async (value) => {
-    try {
-      await Axios.post(`${SERVER_URL}/updateFavoriteTeam`, { user: username, favouriteTeam: value });
-      console.log("Favorite Teams updated successfully");
-      setFlippedProfile(true); // Assuming this should be set to true after updating the favorite team
-    } catch (error) {
-      console.error(error);
-      console.log("Error updating FavoriteTeam");
-      // Handle error if needed
-    }
+  const updateFavoriteTeam = async () => {
+  try {
+    await Axios.post(`${SERVER_URL}/updateFavoriteTeam`, { 
+      user: username, 
+      favouriteTeam: inputFavoriteTeam
+    });
+    console.log("Favorite team updated successfully");
+    // You can also show a success message to the user
+  } catch (error) {
+    console.error(error);
+    console.log("Error updating favorite team");
+    // Handle error and show appropriate message to the user
   }
+}
+
+const updatePassword = async () => {
+  try {
+    await Axios.post(`${SERVER_URL}/updatePassword`, { 
+      user: username, 
+      oldPassword: oldPassword,
+      newPassword: newPassword 
+    });
+    console.log("Password updated successfully");
+    // Clear old and new password fields after successful update
+    setOldPassword("");
+    setNewPassword("");
+    // You can also show a success message to the user
+  } catch (error) {
+    console.error(error);
+    console.log("Error updating password");
+    // Handle error and show appropriate message to the user
+  }
+}
+
+const checkpassword = async () => {
+  try{
+   const response = await Axios.post('${SERVER_URL}/checkpassword',{
+      user: username
+    })
+    const userData = response.data[0];
+    setCheckPassword(userData.password);
+  }catch(error){
+    console.log(error);
+  }
+}
 
   function Team_Fullname(team){
     switch(team){
@@ -140,32 +233,7 @@ function UserProfile() {
   }
 
 
-  useEffect(() => {
-    return () => {
-      clearInterval(intervalId);
-    };
-  }, [intervalId]);
-
-  const startInterval = () => {
-    const id = setInterval(() => {
-      setFlippedProfile((prevFlipped) => !prevFlipped);
-    }, 7000);
-    setIntervalId(id);
-  };
-
-  const handleFavoriteTeamChange = (event) => {
-    setInputFavoriteTeam(Team_Fullname(event.target.value));
-    updateFavoriteTeam(inputFavoriteTeam);
-    
-    if(event.target.value !== ""){
-      setFlippedProfile(true); 
-    }
-    if (intervalId) {
-      clearInterval(intervalId);
-    }
-    startInterval();
-  };
-
+  
   function validateEmail(email) {
     const re = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return re.test(String(email).toLowerCase());
@@ -282,18 +350,35 @@ function UserProfile() {
       setGenderError("");
     }else{
       setGenderError("Please select a gender");
-      return;
+      
+    }
+    if (inputFavoriteTeam !== "") {
+      updateFavoriteTeam(inputFavoriteTeam);
+       // Refresh user data after updating favorite team
+      setFlippedProfile(true);
     }
     getData();
+    
+    return;
   };
 
   const handleLogout = () => {
     // To be implemented
   };
 
-  const handleSavePassword = () => {
+  /*const handleSavePassword = () => {
     // To be implemented
     setShowChangePassword(false);
+  };*/
+
+  const handleSavePassword = () => {
+    if (oldPassword && newPassword) {
+      updatePassword();
+      setShowChangePassword(false);
+    } else {
+      // Show error message to the user if old or new password is missing
+      console.log("Please enter both old and new passwords");
+    }
   };
 
   const handleCancelPassword = () => {
@@ -354,34 +439,13 @@ function UserProfile() {
                   {/* Profile Picture */}
                   {!showChangePassword && (
                     <div>
-                      <p className="text-lg font-bold text-blue-700 flex justify-center">Profile Picture</p>
+                      <p className="text-lg font-bold text-blue-700 flex justify-center">Profile </p>
                       <dd className="mt-1 text-sm text-gray-900">
                         <br/><br/>
                         {showUpdateProfile ? (
                           <div className="flex justify-center">
-                            <label htmlFor="fileInput" className="relative cursor-pointer bg-gradient-to-r from-blue-400 to-indigo-500 text-white rounded-md py-2 px-4 shadow-md hover:shadow-lg">
-                              <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke="currentColor"
-                                className="h-6 w-6 inline-block mr-2"
-                              >
-                                <path
-                                  strokeLinecap="round"
-                                  strokeLinejoin="round"
-                                  strokeWidth="2"
-                                  d="M12 16.5V9.75m0 0l3 3m-3-3l-3 3M6.75 19.5a4.5 4.5 0 01-1.41-8.775 5.25 5.25 0 0110.233-2.33 3 3 0 013.758 3.848A3.752 3.752 0 0118 19.5H6.75z"
-                                />
-                              </svg>
-                              <span>Upload Files</span>
-                            </label>
-                            <input
-                              id="fileInput"
-                              type="file"
-                              onChange={handleProfilePictureChange}
-                              className="hidden"
-                            />
+                            
+                            
                           </div>
                         ) : (
                           <div className="mx-auto w-32 h-32 relative -mt-3 border-4 border-white rounded-full overflow-hidden">
@@ -520,16 +584,16 @@ function UserProfile() {
                             <div className="mb-4">
                               <select  onChange={handleFavoriteTeamChange} className="border-blue-800 focus:border-indigo-500 focus:ring focus:ring-indigo-700 rounded-md p-2 bg-blue-100">
                                 <option value="">Select</option>
-                                <option value="csk">Chennai Super Kings</option>
-                                <option value="dc">Delhi Capitals</option>
-                                <option value="kkr">Kolkata Knight Riders</option>
-                                <option value="mi">Mumbai Indians</option>
-                                <option value="pbks">Punjab Kings</option>
-                                <option value="rr">Rajasthan Royals</option>
-                                <option value="rcb">Royal Challengers Bengaluru</option>
-                                <option value="srh">Sunrisers Hyderabad</option>
-                                <option value="lsg">Lucknow Super Giants</option>
-                                <option value="gt">Gujarat Titans</option>
+                                <option value="Chennai Super Kings">Chennai Super Kings</option>
+                                <option value="Delhi Capitals">Delhi Capitals</option>
+                                <option value="Kolkata Knight Riders">Kolkata Knight Riders</option>
+                                <option value="Mumbai Indians">Mumbai Indians</option>
+                                <option value="Punjab Kings">Punjab Kings</option>
+                                <option value="Rajasthan Royals">Rajasthan Royals</option>
+                                <option value="Royal Challengers Bengaluru">Royal Challengers Bengaluru</option>
+                                <option value="Sunrisers Hyderabad">Sunrisers Hyderabad</option>
+                                <option value="Lucknow Super Giants">Lucknow Super Giants</option>
+                                <option value="Gujarat Titans">Gujarat Titans</option>
                               </select>
                             </div>
                           ) : (
@@ -600,12 +664,7 @@ function UserProfile() {
                           >
                             Update User Profile
                           </button>
-                          <button
-                            onClick={handleChangePassword}
-                            className="inline-flex items-center ml-2 px-4 py-2 border border-transparent rounded-md shadow-sm font-medium text-blue-100 bg-blue-800 hover:bg-blue-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
-                          >
-                            Change Password
-                          </button>
+                          
                         </div>
                       )}
                     </>
