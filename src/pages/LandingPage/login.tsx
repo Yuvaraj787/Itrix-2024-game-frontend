@@ -22,7 +22,6 @@ import {
 } from 'react-google-recaptcha-v3';
 import { useContext } from "react";
 import { CustomContext } from "@/App";
-import { GoogleReCaptcha, GoogleReCaptchaProvider } from "react-google-recaptcha-v3";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -128,7 +127,7 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-black">
-      <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
+      <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
         <GoogleReCaptcha
           onVerify={onVerify}
           refreshReCaptcha={refreshReCaptcha}

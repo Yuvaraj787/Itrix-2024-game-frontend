@@ -135,7 +135,7 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex justify-center items-center items-center bg-black">
-      <GoogleReCaptchaProvider reCaptchaKey="6LdUsrgpAAAAAIbJ6RrFUtalGsC2CDQrhgQI0ILX">
+      <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
         <GoogleReCaptcha
           onVerify={onVerify}
           refreshReCaptcha={refreshReCaptcha}
