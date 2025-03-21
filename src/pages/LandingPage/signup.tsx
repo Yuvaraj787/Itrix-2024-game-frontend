@@ -168,8 +168,8 @@ export default function SignUp() {
               <>
                 <div className="space-y-2">
                   <Label htmlFor="passcode" className="text-white">
-                    OTP
-                  </Label>
+                    OTP ( NOTE: Check in span section also )
+                  </Label><br></br>
                   <div className="flex gap-1">
                     <Input
                       placeholder="OTP"
