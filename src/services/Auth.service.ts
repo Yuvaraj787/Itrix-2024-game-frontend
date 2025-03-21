@@ -1,5 +1,6 @@
 import axios from "axios";
 import port  from '@/OwnComponents/variables';
+import { toast } from "react-toastify";
 //jwt-token
 export const jwtTokenHandler = async () => {
   try {
@@ -27,11 +28,14 @@ export const jwtTokenHandler = async () => {
 export const loginHandler = async (data: any) => {
   try {
     const resp = await axios.post(port + "/auth/login/", data);
+    console.log("login response");
+    console.log(resp.data);
     return resp.data;
   } catch (err) {
     if (err.response) return err.response.data;
-
-    return false;
+    console.log(":u asked")
+    console.log(err)
+    return { success: false, message: err.message };
   }
 };
 
@@ -42,7 +46,6 @@ export const signupHandler = async (data: any) => {
     return resp.data;
   } catch (err) {
     if (err.response) return err.response.data;
-
     return false;
   }
 };

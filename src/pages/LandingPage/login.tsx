@@ -67,8 +67,7 @@ export default function Login() {
     const resp = await resetPasswordHandler({
       email,
       password,
-      otp: OTP,
-      recaptcha_token: token,
+      otp: OTP
     });
 
     if (resp) {
@@ -97,8 +96,7 @@ export default function Login() {
     try {
       const resp = await loginHandler({
         email,
-        password,
-        recaptcha_token: token,
+        password
       });
       if (resp) {
         if (resp.success) {
@@ -107,10 +105,10 @@ export default function Login() {
           // data?.changeAuth(true)
           window.location.reload();
         } else {
-          toast.error("Please reload and try ");
+          toast.error("Please reload and try " + resp.message);
         }
       } else {
-        toast.error("Something went wrong");
+        toast.error("Something went wrong : " + resp.message);
       }
 
       setRequesting(false);
@@ -127,12 +125,12 @@ export default function Login() {
 
   return (
     <div className="min-h-screen flex justify-center items-center bg-black">
-      <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
+      {/* <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
         <GoogleReCaptcha
           onVerify={onVerify}
           refreshReCaptcha={refreshReCaptcha}
         ></GoogleReCaptcha>
-      </GoogleReCaptchaProvider>
+      </GoogleReCaptchaProvider> */}
 
       <Card className="mx-auto max-w-sm m-5 backdrop-blur bg-white/25">
         <CardHeader className="space-y-1 flex items-center justify-center">

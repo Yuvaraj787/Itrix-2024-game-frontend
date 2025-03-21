@@ -26,6 +26,7 @@
     "change-case": "^5.4.3",
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.0",
+    "framer-motion": "^12.5.0",
     "localforage": "^1.10.0",
     "lucide-react": "^0.363.0",
     "match-sorter": "^6.3.4",

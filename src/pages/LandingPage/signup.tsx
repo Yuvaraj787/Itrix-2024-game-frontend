@@ -135,12 +135,12 @@ export default function SignUp() {
 
   return (
     <div className="min-h-screen flex justify-center items-center items-center bg-black">
-      <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
+      {/* <GoogleReCaptchaProvider reCaptchaKey="6LfTNPoqAAAAAJij68qlTiqJ8gYrfHQ3Tt_7V4FT">
         <GoogleReCaptcha
           onVerify={onVerify}
           refreshReCaptcha={refreshReCaptcha}
         ></GoogleReCaptcha>
-      </GoogleReCaptchaProvider>
+      </GoogleReCaptchaProvider> */}
 
       <Card className="mx-auto max-w-sm m-5 backdrop-blur bg-white/25">
         <CardHeader className="space-y-1 flex items-center justify-center">

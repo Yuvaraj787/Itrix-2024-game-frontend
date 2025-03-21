@@ -66,8 +66,8 @@ function BeforeStart() {
   }, []);
 
   const startAuction = () => {
-    if (users.length < 2) {
-      toast.info("Need atleast two members to start the auction");
+    if (users.length < 3) {
+      toast.info("Need atleast three members to start the auction. Call your friends !");
       return;
     }
     socket.emit('start-auction', "start");
